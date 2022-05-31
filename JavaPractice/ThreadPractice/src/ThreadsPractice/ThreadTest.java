@@ -12,6 +12,7 @@ class MyThread extends Thread{
 
     public MyThread(String name){
         super(name);
+        setPriority(Thread.MIN_PRIORITY+2);
     }
 }
 
@@ -23,5 +24,11 @@ public class ThreadTest {
         Thread th1 = new Thread("My Thread name 2");
         Thread th2 = new Thread(new MyRun());
         MyThread t = new MyThread("Thread 1");
+        System.out.println("ID :" + t.getId());
+        System.out.println("Name : " + t.getName());
+        System.out.println("Priority : " + t.getPriority());
+       // t.start();
+        System.out.println("State : " + t.getState());
+        System.out.println("is Alive or not " + t.isAlive());
     }
 }
