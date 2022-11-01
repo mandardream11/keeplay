@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class EventsTest {
 
     public static void main(String[] args) throws Exception {
-        String filePath = "/Users/mandar.vyas/git/Frontend/Events/src/events";
+        String filePath = "/Users/mandar.vyas/git/keeplay/Events/src/test/EventsFile/AgeConsentEvents";
         File file = new File(filePath);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()) {
@@ -81,8 +81,19 @@ public class EventsTest {
                         System.out.println("Selection : " + selection);
                         System.out.println("---------------------");
                     }
+                    else if (eventName.get("eventName").equals("RegisterTapped")) {
+                        JSONObject props = (JSONObject) eventName.get("props");
+                        String appName = props.get("app_name").toString();
+                        String ageCheckBox = props.get("ageCheckBox").toString();
+                        System.out.println("For event " + eventName.get("eventName"));
+                        System.out.println("---------------------");
+                        System.out.println("App Name : " + appName);
+                        System.out.println("AgeCheckBox : " + ageCheckBox);
+                        System.out.println("---------------------");
+                    }
                 }
             }
         }
+        sc.close();
     }
 }
