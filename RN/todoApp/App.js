@@ -1,7 +1,7 @@
 // App.js
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -56,17 +56,22 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        {tasks.slice().reverse().map((task) => (
-          <View style={styles.taskContainer}>
+      <FlatList
+        style={styles.scrollView}
+        data={tasks.slice().reverse()}
+        keyExtractor={(task) => task.id.toString()}
+        renderItem={({ item: task }) => (
+          <View style={styles.taskContainer} key={task.id}>
             <Text style={styles.taskText}>{task.text}</Text>
-            <TouchableOpacity key={task.id}
-              onPress={() => removeTask(task.id)} style={styles.deleteButton}>
+            <TouchableOpacity
+              onPress={() => removeTask(task.id)}
+              style={styles.deleteButton}>
               <Text style={styles.deleteButtonText}>Delete</Text>
             </TouchableOpacity>
           </View>
-        ))}
-      </ScrollView>
+        )}
+      />
+
       <View style={styles.inputContainer}>
 
         <TextInput
