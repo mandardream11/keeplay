@@ -1,10 +1,14 @@
 // App.js
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Dimensions } from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const HomeScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
@@ -56,28 +60,36 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.scrollView}
-        data={tasks.slice().reverse()}
-        keyExtractor={(task) => task.id.toString()}
-        renderItem={({ item: task }) => (
-          <View style={styles.taskContainer} key={task.id}>
-            <TouchableOpacity
-              style={styles.taskText}
-              onPress={() => navigation.navigate('Task Details', { taskText: task.text })}>
-              <Text>{task.text}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => removeTask(task.id)}
-              style={styles.deleteButton}>
-              <Text style={styles.deleteButtonText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
+      {tasks.length === 0 ? (
+        <Image
+          source={require('./assets/no-data.jpg')}
+          style={styles.noTaskImage}
+          resizeMode="stretch"
+        />
+      ) : (
+        <FlatList
+          style={styles.scrollView}
+          data={tasks.slice().reverse()}
+          keyExtractor={(task) => task.id.toString()}
+          renderItem={({ item: task }) => (
+            <View style={styles.taskContainer} key={task.id}>
+              <TouchableOpacity
+                style={styles.taskText}
+                onPress={() => navigation.navigate('Task Details', { taskText: task.text })}>
+                <Text>{task.text}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => removeTask(task.id)}
+                style={styles.deleteButton}>
+                <Text style={styles.deleteButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+
+      )}
 
       <View style={styles.inputContainer}>
-
         <TextInput
           style={[
             styles.input,
@@ -129,11 +141,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
+    justifyContent: 'space-between'
   },
   scrollView: {
     flex: 1,
     marginTop: 20,
     paddingHorizontal: 20,
+  },
+  noTaskImage: {
+    width: windowWidth,
+    height: '90%',
+    resizeMode: "stretch"
+
   },
   taskContainer: {
     flexDirection: 'row',
