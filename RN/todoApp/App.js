@@ -62,7 +62,11 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(task) => task.id.toString()}
         renderItem={({ item: task }) => (
           <View style={styles.taskContainer} key={task.id}>
-            <Text style={styles.taskText}>{task.text}</Text>
+            <TouchableOpacity
+              style={styles.taskText}
+              onPress={() => navigation.navigate('Task Details', { taskText: task.text })}>
+              <Text>{task.text}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => removeTask(task.id)}
               style={styles.deleteButton}>
@@ -92,13 +96,30 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+const TaskScreen = ({ route }) => {
+  const { taskText } = route.params;
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text > {taskText} </Text>
+    </View >
+  );
+};
+
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="TODO App" component={HomeScreen} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+        />
+        <Stack.Screen
+          name="Task Details"
+          component={TaskScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
